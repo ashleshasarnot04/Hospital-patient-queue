@@ -1,0 +1,55 @@
+#include <iostream>
+#include <queue>
+using namespace std;
+
+struct Patient {
+    string name;
+    int priority; // 1 = Emergency, 0 = Normal
+};
+
+queue<Patient> normalQ;
+priority_queue<pair<int,string>> emergencyQ;
+
+void addPatient() {
+    Patient p;
+    cout << "Enter name: ";
+    cin >> p.name;
+    cout << "Emergency? (1=Yes,0=No): ";
+    cin >> p.priority;
+    if (p.priority == 1)
+        emergencyQ.push({1, p.name});
+    else
+        normalQ.push(p);
+}
+
+void servePatient() {
+    if (!emergencyQ.empty()) {
+        cout << "Serving Emergency: " << emergencyQ.top().second << endl;
+        emergencyQ.pop();
+    } else if (!normalQ.empty()) {
+        cout << "Serving Normal: " << normalQ.front().name << endl;
+        normalQ.pop();
+    } else {
+        cout << "No patients in queue.\n";
+    }
+}
+
+void displayQueue() {
+    cout << "Emergency Queue size: " << emergencyQ.size() << endl;
+    cout << "Normal Queue size: " << normalQ.size() << endl;
+}
+
+int main() {
+    int ch;
+    do {
+        cout << "\n--- Hospital Queue ---\n";
+        cout << "1. Add Patient\n2. Serve Patient\n3. Display Queue\n0. Exit\nChoice: ";
+        cin >> ch;
+        switch(ch) {
+            case 1: addPatient(); break;
+            case 2: servePatient(); break;
+            case 3: displayQueue(); break;
+        }
+    } while(ch != 0);
+    return 0;
+}
